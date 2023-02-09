@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Organization Chart Plugin</title>
+    <link rel="icon" href="img/logo.png">
+    <link rel="stylesheet" href="css/jquery.orgchart.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script language=javascript>
+        var t1 = new Date().getTime();
+    </script>
+</head>
+<body>
+<div id="chart-container"></div>
+<div id="chart"></div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.orgchart.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+        var data1=[];
+
+        $.ajax({
+            type:"post",
+            url:"/getData",
+            data:{},
+            async: false,
+            success:function (data) {
+                data1 = data;
+            }
+        });
+
+        var tree = [];
+        var lookup = {}; // temporary variable
+
+        for (var i in data1) {
+            var items = data1[i];
+
+            var obj = {
+                id: items['id'],
+                parent_id: items['pid'],
+                name: items['name'],
+                title: items['title'],
+                children: []
+            };
+            lookup[obj.id] = obj;
+
+            if (lookup[obj.parent_id]) {
+                lookup[obj.parent_id].children.push(obj);
+            } else {
+                tree.push(obj);
+            }
+        }
+        // console.log(JSON.stringify(datasource)); // will display your tree
+        var str2 = JSON.stringify(tree).substring(1, JSON.stringify(tree).length - 1); //删除首位字符
+        // console.log(str2);
+        var data = JSON.parse(str2);
+        /*
+  data【json or String】：数据
+  pan 【boolean 默:flase】：通过鼠标拖放来控制OrgChart
+  zoom【boolean 默:false】：通过鼠标滚轮放大或缩放OrgChart
+  zoominLimit【number 默:7】：设置放大限制
+  zoomoutLimit【number 默:0.5】：设置缩放限制
+  direction【String 默:t2b】：T2B："从上到下"，B2T："从底到上"，L2R："左到右"，R2L："向左到右"
+  verticalLevel【integer(>=2)】：
+  toggleSiblingsResp【boolean 默:false】：通过单击左/右箭头分别显示/隐藏左/右兄弟节点
+  ajaxURL【json】：不同的优先级提供了发送不同节点的Ajax请求的URL
+  visibleLevel【number】：默认展开几级
+  nodeId【String 默:id】：将数据源的一个属性设置为每个OrgChart节点的唯一标识符。
+  nodeTitle【String 默:name】：将数据源的一个属性设置为OrgChart节点标题段的文本内容
+  nodeContent【String】：将数据源的一个属性设置为OrgChart节点的内容部分的文本内容。
+  nodeTemplate【function】：它是一个模板生成函数，用于定制任何复杂的节点内部结构
+  createNode【function】：它是用于自定义每个OrgCad节点的回调函数
+  parentNodeSymbol【String 默:fa-users】：使用图标暗示该节点有子节点
+  exportButton【boolean 默:false】：是否启用OrgChart的导出按钮
+  exportFilename【String 默:OrgChart】：当输出当前的OrgChart作为图片时，它是文件名。
+  exportFileextension【String 默:png】：可用的值是PNG和PDF。
+  chartClass【String】：当你想在一个页面上实例化多个orgcharts 时，你应该添加不同的类名来区分它们。
+  draggable【boolean 默:false】：用户可以拖动和删除OrgChart节点
+  dropCriteria【function】：用户可以构造自己的标准来限制拖动节点和删除区域之间的关系
+  initCompleted【function】：经常知道您的表何时已经完全初始化、数据加载和呈现，尤其是当使用Ajax数据源时
+  */
+
+
+
+        var oc = $('#chart-container').orgchart({
+            'data': data,
+            'visibleLevel':100,
+            'nodeId': 'id',
+            'toggleSiblingsResp': false,
+            //'nodeTitle':'img',
+            'nodeContent': 'title',
+            'pan': true,
+            'zoom': true,
+            'zoombyMousePosition':true
+        });
+
+        oc.$chartContainer.on('touchmove', function(event) {
+            event.preventDefault();
+        });
+        window.onload = function()
+        {
+            console.log("加载本页耗时 "+ (new Date().getTime()-t1) +" 毫秒");
+        }
+    });
+</script>
+</body>
+</html>

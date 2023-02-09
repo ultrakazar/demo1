@@ -1,0 +1,30 @@
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding: 1px;
+  box-sizing: border-box;
+  overflow: hidden;  /*清除浮动*/
+  zoom:1;
+}
+
+body {
+  font-family: Arial;
+  color: #333333;
+}
+
+#chart-container {
+  text-align: center;
+}
+.orgchart {
+  position: absolute;
+  transform: translate(-50%, 0%);
+  transform-origin:0 0;
+  justify-content: center;
+}
+.orgchart .nodes {
+  justify-content: center;
+}
+.orgchart .node .title {
+  width: auto;
+}

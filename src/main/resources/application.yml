@@ -1,0 +1,46 @@
+spring:
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/templates/
+  datasource:
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&allowMultiQueries=true&characterEncoding=utf8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    hikari:
+      read-only: false
+      connection-timeout: 60000
+      idle-timeout: 60000
+      validation-timeout: 3000
+      max-lifetime: 60000
+      login-timeout: 5
+      maximum-pool-size: 60
+      minimum-idle: 10
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.test1.entity
+
+logging:
+  level:
+    com:
+      leshangju:
+        prism:
+          auth:
+            dao: debug
+          usershop:
+            dao: debug
+          loginuser:
+            dao: debug
+  file:
+    name: src/log
